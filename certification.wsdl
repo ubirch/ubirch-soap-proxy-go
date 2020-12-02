@@ -15,7 +15,7 @@
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="ActionReferenceNumber" type="xsd:string"/>
-                        <xsd:element name="ActionID" type="xsd:string" />
+                        <xsd:element name="ActionID" type="xsd:string"/>
                         <xsd:element name="SpecialUseID" type="xsd:string"/>
                         <xsd:element name="PeriodBeginDate" type="xsd:string"/>
                         <xsd:element name="PeriodBeginTime" type="xsd:string"/>
@@ -44,6 +44,14 @@
                     </xsd:all>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="CertificationFault">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element minOccurs="0" name="faultcode" type="xsd:string"/>
+                        <xsd:element minOccurs="0" name="faultstring" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
         </xsd:schema>
     </wsdl:types>
 
@@ -55,11 +63,16 @@
         <wsdl:part name="parameters" element="ubirch:CertificationResponse"/>
     </wsdl:message>
 
+    <wsdl:message name="CertificationFaultResponse">
+        <wsdl:part name="fault" element="ubirch:CertificationFault"/>
+    </wsdl:message>
+
     <wsdl:portType name="DocumentCertification">
         <wsdl:documentation>Send a certification request to anchor document.</wsdl:documentation>
         <wsdl:operation name="certify">
             <wsdl:input message="ubirch:DocumentCertificationRequest"/>
             <wsdl:output message="ubirch:DocumentCertificationResponse"/>
+            <wsdl:fault message="ubirch:CertificationFaultResponse" name="CertificationFaultResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -73,6 +86,9 @@
             <wsdl:output>
                 <soap:body use="literal"/>
             </wsdl:output>
+            <wsdl:fault name="CertificationFault">
+                <soap:fault name="CertificationFault" use="literal"/>
+            </wsdl:fault>
         </wsdl:operation>
     </wsdl:binding>
 
