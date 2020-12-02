@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:ubirch="http://ubirch.com/"
+                  xmlns:ubirch="http://ubirch.com/wsdl/1.0"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                   name="UBIRCHClientService"
-                  targetNamespace="http://ubirch.com/">
+                  targetNamespace="http://ubirch.com/wsdl/1.0">
     <wsdl:documentation>
         Description of the special use UBIRCH client service.
     </wsdl:documentation>
 
     <wsdl:types>
-        <xsd:schema targetNamespace="http://ubirch.com/">
+        <xsd:schema targetNamespace="http://ubirch.com/wsdl/1.0">
             <xsd:element name="Document">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -79,7 +79,6 @@
     <wsdl:binding name="DocumentCertificationSOAP" type="ubirch:DocumentCertification">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="certify">
-            <soap:operation soapAction="http://certify.ubirch.com/"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -93,8 +92,6 @@
     </wsdl:binding>
 
     <wsdl:service name="DocumentCertificationService">
-        <wsdl:port binding="ubirch:DocumentCertificationSOAP" name="DocumentServiceSOAP">
-            <soap:address location="http://certify.ubirch.com/"/>
-        </wsdl:port>
+        <wsdl:port binding="ubirch:DocumentCertificationSOAP" name="DocumentServiceSOAP"/>
     </wsdl:service>
 </wsdl:definitions>
