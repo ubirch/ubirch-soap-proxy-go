@@ -34,7 +34,7 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element name="Response">
+            <xsd:element name="CertificationResponse">
                 <xsd:complexType>
                     <xsd:all>
                         <xsd:element name="Hash" type="xsd:string"/>
@@ -52,7 +52,7 @@
     </wsdl:message>
 
     <wsdl:message name="DocumentCertificationResponse">
-        <wsdl:part name="parameters" element="ubirch:Response"/>
+        <wsdl:part name="parameters" element="ubirch:CertificationResponse"/>
     </wsdl:message>
 
     <wsdl:portType name="DocumentCertification">
