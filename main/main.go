@@ -49,6 +49,11 @@ type soapDocument struct {
 	ToCrossroad           string `xml:"ToCrossroad"`
 }
 
+type fault struct {
+	Faultcode   string `xml:"faultcode"`
+	Faultstring string `xml:"faultstring"`
+}
+
 type CertificationResponse struct {
 	Hash     string
 	Upp      string
@@ -148,21 +153,29 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 	soapReq, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("unable to read request body: %v", err), http.StatusBadRequest)
+		return
 	}
 
 	jsonReq, err := parseSoapRequest(soapReq)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("unable to parse request body: %v", err), http.StatusBadRequest)
+		return
 	}
 
 	respCode, respBody, respHeader, err := sendJsonRequest(jsonReq)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("unable to send request: %v", err), http.StatusInternalServerError)
+		return
 	}
 
 	xmlResp, err := parseJsonResponse(respBody)
 	if err != nil {
-		xmlResp = respBody // todo
+		xmlBytes, err := xml.Marshal(fault{Faultcode: "soap:Server", Faultstring: string(respBody)})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		xmlResp = xmlBytes // todo
 	}
 
 	forwardClientResponse(w, respCode, xmlResp, respHeader)
