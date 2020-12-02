@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'>
+    <soap:Body>
+        <ubirch:Document xmlns:ubirch='http://ubirch.com/'>
+            <ActionReferenceNumber>a</ActionReferenceNumber>
+            <ActionID>b</ActionID>
+            <SpecialUseID>c</SpecialUseID>
+            <PeriodBeginDate>d</PeriodBeginDate>
+            <PeriodBeginTime>e</PeriodBeginTime>
+            <PeriodEndDate>f</PeriodEndDate>
+            <PeriodEndTime>g</PeriodEndTime>
+            <PostCode>h</PostCode>
+            <City>i</City>
+            <District>j</District>
+            <Street>k</Street>
+            <HouseNumber>l</HouseNumber>
+            <FromCrossroad>m</FromCrossroad>
+            <ToCrossroad>n</ToCrossroad>
+            <!-- optional -->
+            <LicensePlate>o</LicensePlate>
+            <!-- optional -->
+            <GeoAreaCoordinates>p</GeoAreaCoordinates>
+            <!-- optional -->
+            <GeoOverviewCoordinates>q</GeoOverviewCoordinates>
+        </ubirch:Document>
+    </soap:Body>
+</soap:Envelope>
