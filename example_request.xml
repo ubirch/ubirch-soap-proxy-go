@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'>
     <soap:Body>
-        <ubirch:Document xmlns:ubirch='http://ubirch.com/'>
+        <ubirch:Document xmlns:ubirch='http://ubirch.com/wsdl/1.0'>
             <ActionReferenceNumber>a</ActionReferenceNumber>
             <ActionID>b</ActionID>
             <SpecialUseID>c</SpecialUseID>
