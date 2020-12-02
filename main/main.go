@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 )
 
 const (
@@ -48,7 +49,7 @@ type soapDocument struct {
 	ToCrossroad           string `xml:"ToCrossroad"`
 }
 
-type clientResponse struct {
+type CertificationResponse struct {
 	Hash     string
 	Upp      string
 	Response string
@@ -61,7 +62,7 @@ func setConfig() error {
 		return err
 	}
 
-	ubirchClientURL = fmt.Sprintf("localhost:8080/%s", conf.Uuid)
+	ubirchClientURL = fmt.Sprintf("http://localhost:8080/%s", conf.Uuid)
 	ubirchClientHeaders = map[string]string{
 		"Content-Type": "application/json",
 		"X-Auth-Token": conf.Auth,
@@ -85,7 +86,7 @@ func parseSoapRequest(reqBody []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	jsonBytes, err := json.Marshal(Envelope)
+	jsonBytes, err := json.Marshal(Envelope.Body.Document)
 	if err != nil {
 		return nil, err
 	}
@@ -117,7 +118,7 @@ func sendJsonRequest(reqBody []byte) (int, []byte, http.Header, error) {
 }
 
 func parseJsonResponse(respBody []byte) ([]byte, error) {
-	var resp clientResponse
+	var resp CertificationResponse
 	err := json.Unmarshal(respBody, &resp)
 	if err != nil {
 		return nil, err
@@ -132,7 +133,9 @@ func parseJsonResponse(respBody []byte) ([]byte, error) {
 
 func forwardClientResponse(w http.ResponseWriter, respCode int, respBody []byte, respHeader http.Header) {
 	for k, v := range respHeader {
-		w.Header().Set(k, v[0])
+		if strings.ToLower(k) != "content-length" {
+			w.Header().Set(k, v[0])
+		}
 	}
 	w.WriteHeader(respCode)
 	_, err := w.Write(respBody)
