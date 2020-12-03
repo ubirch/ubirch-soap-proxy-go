@@ -12,13 +12,11 @@ import (
 )
 
 const (
-	configFile = "config.json"
+	configFile      = "config.json"
+	ubirchClientURL = "http://localhost:8080/%s"
 )
 
-var (
-	ubirchClientURL     string
-	ubirchClientHeaders map[string]string
-)
+var conf config
 
 type config struct {
 	Uuid string `json:"uuid"`
@@ -35,11 +33,11 @@ type soapBody struct {
 type soapDocument struct {
 	ActionReferenceNumber string `xml:"ActionReferenceNumber,omitempty"`
 	ActionID              string `xml:"ActionID,omitempty"`
-	SpecialUseID          string `xml:"SpecialUseID"`    // todo: enum?
-	PeriodBeginDate       string `xml:"PeriodBeginDate"` // todo: type -> date
-	PeriodBeginTime       string `xml:"PeriodBeginTime"` // todo: type -> time
-	PeriodEndDate         string `xml:"PeriodEndDate"`   // todo: type -> date
-	PeriodEndTime         string `xml:"PeriodEndTime"`   // todo: type -> time
+	SpecialUseID          string `xml:"SpecialUseID"`
+	PeriodBeginDate       string `xml:"PeriodBeginDate"`
+	PeriodBeginTime       string `xml:"PeriodBeginTime"`
+	PeriodEndDate         string `xml:"PeriodEndDate"`
+	PeriodEndTime         string `xml:"PeriodEndTime"`
 	PostCode              string `xml:"PostCode"`
 	City                  string `xml:"City"`
 	District              string `xml:"District"`
@@ -58,22 +56,6 @@ type CertificationResponse struct {
 	Hash     string
 	Upp      string
 	Response string
-}
-
-func setConfig() error {
-	conf := config{}
-	err := conf.load(configFile)
-	if err != nil {
-		return err
-	}
-
-	ubirchClientURL = fmt.Sprintf("http://localhost:8080/%s", conf.Uuid)
-	ubirchClientHeaders = map[string]string{ // todo use header from original request if it exists
-		"Content-Type": "application/json",
-		"X-Auth-Token": conf.Auth,
-	}
-
-	return nil
 }
 
 func (c *config) load(filename string) error {
@@ -98,17 +80,34 @@ func parseSoapRequest(reqBody []byte) ([]byte, error) {
 	return jsonBytes, nil
 }
 
-func sendJsonRequest(reqBody []byte) (int, []byte, http.Header, error) {
+func getAuth(r *http.Request) string {
+	auth := r.Header.Get("X-Auth-Token")
+	if auth == "" {
+		auth = conf.Auth
+	}
+	return auth
+}
+
+func getUuid(r *http.Request) string {
+	uuid := r.Header.Get("X-UUID")
+	if uuid == "" {
+		uuid = conf.Uuid
+	}
+	return uuid
+}
+
+func sendJsonRequest(reqBody []byte, uuid string, auth string) (int, []byte, http.Header, error) {
 	client := &http.Client{}
 
-	req, err := http.NewRequest("POST", ubirchClientURL, bytes.NewBuffer(reqBody))
+	url := fmt.Sprintf(ubirchClientURL, uuid)
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return 0, nil, nil, err
 	}
 
-	for k, v := range ubirchClientHeaders {
-		req.Header.Set(k, v)
-	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Auth-Token", auth)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -171,7 +170,7 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	respCode, respBody, respHeader, err := sendJsonRequest(jsonReq)
+	respCode, respBody, respHeader, err := sendJsonRequest(jsonReq, getUuid(req), getAuth(req))
 	if err != nil {
 		Error(w, fmt.Sprintf("unable to send request: %v", err), http.StatusInternalServerError)
 		return
@@ -193,9 +192,9 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	err := setConfig()
+	err := conf.load(configFile)
 	if err != nil {
-		log.Fatalf("Could not set config: %v", err)
+		log.Fatalf("Could not load config: %v", err)
 	}
 
 	http.HandleFunc("/", handleRequest)
