@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -17,7 +17,7 @@ const (
 
 var (
 	ubirchClientURL     string
-	ubirchClientHeaders = map[string]string{}
+	ubirchClientHeaders map[string]string
 )
 
 type config struct {
@@ -68,7 +68,7 @@ func setConfig() error {
 	}
 
 	ubirchClientURL = fmt.Sprintf("http://localhost:8080/%s", conf.Uuid)
-	ubirchClientHeaders = map[string]string{
+	ubirchClientHeaders = map[string]string{ // todo use header from original request if it exists
 		"Content-Type": "application/json",
 		"X-Auth-Token": conf.Auth,
 	}
@@ -98,12 +98,12 @@ func parseSoapRequest(reqBody []byte) ([]byte, error) {
 	return jsonBytes, nil
 }
 
-func sendJsonRequest(reqBody []byte) (int, []byte, http.Header, error) {
+func sendJsonRequest(reqBody []byte) (int, []byte, error) {
 	client := &http.Client{}
 
 	req, err := http.NewRequest("POST", ubirchClientURL, bytes.NewBuffer(reqBody))
 	if err != nil {
-		return 0, nil, nil, fmt.Errorf("can't make new post request: %v", err)
+		return 0, nil, err
 	}
 
 	for k, v := range ubirchClientHeaders {
@@ -112,14 +112,14 @@ func sendJsonRequest(reqBody []byte) (int, []byte, http.Header, error) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return 0, nil, nil, err
+		return 0, nil, err
 	}
 
 	//noinspection GoUnhandledErrorResult
 	defer resp.Body.Close()
 
-	respBodyBytes, err := ioutil.ReadAll(resp.Body)
-	return resp.StatusCode, respBodyBytes, resp.Header, err
+	respBodyBytes, _ := ioutil.ReadAll(resp.Body)
+	return resp.StatusCode, respBodyBytes, nil
 }
 
 func parseJsonResponse(respBody []byte) ([]byte, error) {
@@ -136,55 +136,66 @@ func parseJsonResponse(respBody []byte) ([]byte, error) {
 	return xmlBytes, nil
 }
 
-func forwardClientResponse(w http.ResponseWriter, respCode int, respBody []byte, respHeader http.Header) {
-	for k, v := range respHeader {
-		if strings.ToLower(k) != "content-length" {
-			w.Header().Set(k, v[0])
-		}
+func sendResponse(w http.ResponseWriter, respBody []byte, respCode int) {
+	if strings.HasPrefix(string(respBody), "<") {
+		w.Header().Set("Content-Type", "application/soap+xml; charset=utf-8")
+	} else {
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	}
 	w.WriteHeader(respCode)
 	_, err := w.Write(respBody)
 	if err != nil {
-		log.Fatalf("unable to write response: %s", err) // todo fatal?
+		log.Errorf("unable to write response: %v", err)
 	}
+}
+
+func Error(w http.ResponseWriter, error string, code int) {
+	log.Error(error)
+	xmlError, err := xml.Marshal(fault{Faultcode: "soap:Server", Faultstring: error})
+	if err != nil {
+		xmlError = []byte(error)
+	}
+	sendResponse(w, xmlError, code)
 }
 
 func handleRequest(w http.ResponseWriter, req *http.Request) {
 	soapReq, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("unable to read request body: %v", err), http.StatusBadRequest)
+		Error(w, fmt.Sprintf("unable to read request body: %v", err), http.StatusBadRequest)
 		return
 	}
 
 	jsonReq, err := parseSoapRequest(soapReq)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("unable to parse request body: %v", err), http.StatusBadRequest)
+		Error(w, fmt.Sprintf("unable to parse request body: %v", err), http.StatusBadRequest)
 		return
 	}
 
-	respCode, respBody, respHeader, err := sendJsonRequest(jsonReq)
+	respCode, respBody, err := sendJsonRequest(jsonReq)
 	if err != nil {
-		http.Error(w, fmt.Sprintf("unable to send request: %v", err), http.StatusInternalServerError)
+		Error(w, fmt.Sprintf("unable to send request: %v", err), http.StatusInternalServerError)
 		return
 	}
+
+	log.Infof("response: (%d) %s", respCode, respBody)
 
 	xmlResp, err := parseJsonResponse(respBody)
 	if err != nil {
-		xmlBytes, err := xml.Marshal(fault{Faultcode: "soap:Server", Faultstring: string(respBody)})
+		xmlFault, err := xml.Marshal(fault{Faultcode: "soap:Server", Faultstring: string(respBody)})
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+			xmlResp = respBody
+		} else {
+			xmlResp = xmlFault
 		}
-		xmlResp = xmlBytes // todo
 	}
 
-	forwardClientResponse(w, respCode, xmlResp, respHeader)
+	sendResponse(w, xmlResp, respCode)
 }
 
 func main() {
 	err := setConfig()
 	if err != nil {
-		log.Fatalf("Could not set config: %s\n", err.Error())
+		log.Fatalf("Could not set config: %v", err)
 	}
 
 	http.HandleFunc("/", handleRequest)
@@ -194,6 +205,6 @@ func main() {
 
 	err = s.ListenAndServe()
 	if err != nil {
-		log.Fatalf("Could not start server: %s\n", err.Error())
+		log.Fatalf("Could not start server: %v", err)
 	}
 }
