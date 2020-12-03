@@ -19,8 +19,9 @@ const (
 var conf config
 
 type config struct {
-	Uuid string `json:"uuid"`
-	Auth string `json:"auth"`
+	Uuid                string `json:"uuid"`
+	Auth                string `json:"auth"`
+	VerificationBaseURL string `json:"verificationBaseURL"`
 }
 
 type soapEnvelope struct {
@@ -53,9 +54,10 @@ type fault struct {
 }
 
 type CertificationResponse struct {
-	Hash     string
-	Upp      string
-	Response string
+	Hash            string
+	Upp             string
+	Response        string
+	VerificationURL string
 }
 
 func (c *config) load(filename string) error {
@@ -121,12 +123,26 @@ func sendJsonRequest(reqBody []byte, uuid string, auth string) (int, []byte, htt
 	return resp.StatusCode, respBodyBytes, resp.Header, nil
 }
 
-func parseJsonResponse(respBody []byte) ([]byte, error) {
+func parseJsonResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 	var resp CertificationResponse
 	err := json.Unmarshal(respBody, &resp)
 	if err != nil {
 		return nil, err
 	}
+
+	// todo extract method getVerificationURL
+	var reqMap map[string]string
+	err = json.Unmarshal(reqBody, &reqMap)
+	if err != nil {
+		log.Error(err) // todo
+	}
+
+	verificationURL := conf.VerificationBaseURL + "#"
+	for k, v := range reqMap {
+		verificationURL += fmt.Sprintf("%s:%s;", k, v)
+	}
+
+	resp.VerificationURL = strings.TrimSuffix(verificationURL, ";")
 
 	xmlBytes, err := xml.Marshal(resp)
 	if err != nil {
@@ -178,8 +194,9 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 
 	log.Infof("response: (%d) %s, %s", respCode, respBody, respHeader)
 
-	xmlResp, err := parseJsonResponse(respBody)
+	xmlResp, err := parseJsonResponse(respBody, jsonReq)
 	if err != nil {
+		log.Error(err)
 		xmlFault, err := xml.Marshal(fault{Faultcode: "soap:Server", Faultstring: string(respBody)})
 		if err != nil {
 			xmlResp = respBody
