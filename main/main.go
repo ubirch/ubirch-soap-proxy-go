@@ -98,12 +98,12 @@ func parseSoapRequest(reqBody []byte) ([]byte, error) {
 	return jsonBytes, nil
 }
 
-func sendJsonRequest(reqBody []byte) (int, []byte, error) {
+func sendJsonRequest(reqBody []byte) (int, []byte, http.Header, error) {
 	client := &http.Client{}
 
 	req, err := http.NewRequest("POST", ubirchClientURL, bytes.NewBuffer(reqBody))
 	if err != nil {
-		return 0, nil, err
+		return 0, nil, nil, err
 	}
 
 	for k, v := range ubirchClientHeaders {
@@ -112,14 +112,14 @@ func sendJsonRequest(reqBody []byte) (int, []byte, error) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return 0, nil, err
+		return 0, nil, nil, err
 	}
 
 	//noinspection GoUnhandledErrorResult
 	defer resp.Body.Close()
 
 	respBodyBytes, _ := ioutil.ReadAll(resp.Body)
-	return resp.StatusCode, respBodyBytes, nil
+	return resp.StatusCode, respBodyBytes, resp.Header, nil
 }
 
 func parseJsonResponse(respBody []byte) ([]byte, error) {
@@ -171,13 +171,13 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	respCode, respBody, err := sendJsonRequest(jsonReq)
+	respCode, respBody, respHeader, err := sendJsonRequest(jsonReq)
 	if err != nil {
 		Error(w, fmt.Sprintf("unable to send request: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	log.Infof("response: (%d) %s", respCode, respBody)
+	log.Infof("response: (%d) %s, %s", respCode, respBody, respHeader)
 
 	xmlResp, err := parseJsonResponse(respBody)
 	if err != nil {
