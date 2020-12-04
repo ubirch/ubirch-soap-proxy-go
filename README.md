@@ -10,8 +10,6 @@ Simple SOAP proxy for UBIRCH client requests.
 A configuration file `config.json` is required and should be located in the working directory.
 ```json
 {
-  "uuid": "12345678-9abc-def0-1234-56789abcdef0",
-  "auth": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "verificationBaseURL": "https://SOMEDOMAIN.COM/verify",
   "ubirchClientURL": "http://localhost:8080"
 }
@@ -98,3 +96,24 @@ A configuration file `config.json` is required and should be located in the work
       <faultstring>error message</faultstring>
   </fault>
   ```
+
+# Example
+
+Run both the [ubirch-client-go](https://github.com/ubirch/ubirch-client-go)
+and this proxy. Make sure the `ubirchClientURL`above is correct.
+
+## Sending Requests
+
+The SOAP client must send authentication headers with the POST request:
+
+```
+X-UUID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+X-Auth-Token: xxxx
+```
+
+An example [request](example_request.xml) and [response](example_response.xml) are provided.
+The response contains a URL that is then to be rendered into a QR code. Below is the
+URL from the example response:
+
+![Example QR Code](example_qrcode.png)
+
