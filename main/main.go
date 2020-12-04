@@ -34,7 +34,7 @@ type soapBody struct {
 type soapDocument struct {
 	ActionReferenceNumber  string `json:"ActionReferenceNumber,omitempty"`
 	ActionID               string `json:"ActionID,omitempty"`
-	SpecialUseID           string `json:"SpecialUseID,omitempty"`
+	SpecialUseDesc         string `json:"SpecialUseDesc,omitempty"`
 	PeriodBeginDate        string `json:"PeriodBeginDate,omitempty"`
 	PeriodBeginTime        string `json:"PeriodBeginTime,omitempty"`
 	PeriodEndDate          string `json:"PeriodEndDate,omitempty"`
@@ -43,7 +43,8 @@ type soapDocument struct {
 	City                   string `json:"City,omitempty"`
 	District               string `json:"District,omitempty"`
 	Street                 string `json:"Street,omitempty"`
-	HouseNumber            string `json:"HouseNumber,omitempty"`
+	FromHouseNumber        string `json:"FromHouseNumber,omitempty"`
+	ToHouseNumber          string `json:"ToHouseNumber,omitempty"`
 	FromCrossroad          string `json:"FromCrossroad,omitempty"`
 	ToCrossroad            string `json:"ToCrossroad,omitempty"`
 	LicensePlate           string `json:"LicensePlate,omitempty"`

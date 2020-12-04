@@ -14,9 +14,9 @@
             <xsd:element name="Document">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="ActionReferenceNumber" type="xsd:string"/>
+                        <xsd:element name="ActionReferenceNumber" type="xsd:string"/>               <!-- Aktenzeichen -->
                         <xsd:element name="ActionID" type="xsd:string"/>
-                        <xsd:element name="SpecialUseID" type="xsd:string"/>
+                        <xsd:element name="SpecialUseDesc" type="xsd:string"/>                      <!-- no ID but descriptive Text -->
                         <xsd:element name="PeriodBeginDate" type="xsd:string"/>
                         <xsd:element name="PeriodBeginTime" type="xsd:string"/>
                         <xsd:element name="PeriodEndDate" type="xsd:string"/>
@@ -25,12 +25,13 @@
                         <xsd:element name="City" type="xsd:string"/>
                         <xsd:element name="District" type="xsd:string"/>
                         <xsd:element name="Street" type="xsd:string"/>
-                        <xsd:element name="HouseNumber" type="xsd:string"/>
+                        <xsd:element name="FromHouseNumber" type="xsd:string"/>                     <!-- from HouseNumber -->
+                        <xsd:element name="ToHouseNumber" type="xsd:string"/>                       <!-- to HouseNumber -->
                         <xsd:element name="FromCrossroad" type="xsd:string"/>
                         <xsd:element name="ToCrossroad" type="xsd:string"/>
-                        <xsd:element name="LicensePlate" type="xsd:string" minOccurs="0"/>
-                        <xsd:element name="GeoAreaCoordinates" type="xsd:string" minOccurs="0"/>
-                        <xsd:element name="GeoOverviewCoordinates" type="xsd:string" minOccurs="0"/>
+                        <xsd:element name="LicensePlate" type="xsd:string" minOccurs="0"/>          <!-- List -->
+                        <xsd:element name="GeoAreaCoordinates" type="xsd:string" minOccurs="0"/>    <!-- List -->
+                        <xsd:element name="GeoOverviewCoordinates" type="xsd:string" minOccurs="0"/> <!-- List -->
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
@@ -40,7 +41,7 @@
                         <xsd:element name="Hash" type="xsd:string"/>
                         <xsd:element name="UPP" type="xsd:string"/>
                         <xsd:element name="Response" type="xsd:string"/>
-                        <xsd:element name="URL" type="xsd:string"/>
+                        <xsd:element name="URL" type="xsd:string"/>                                 <!-- for QR Code -->
                     </xsd:all>
                 </xsd:complexType>
             </xsd:element>

@@ -25,44 +25,31 @@ A configuration file `config.json` is required and should be located in the work
     ```xml
     <?xml version="1.0" encoding="utf-8"?>
     <soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'>
-        <soap:Body>
-            <ubirch:Document xmlns:ubirch='http://ubirch.com/wsdl/1.0'>
-                <!-- optional -->
-                <ActionReferenceNumber>?XXX?</ActionReferenceNumber>
-                <!-- optional -->
-                <ActionID>?XXX?</ActionID>
-                <!-- optional -->
-                <SpecialUseID>?XXX?</SpecialUseID>
-                <!-- optional -->
-                <PeriodBeginDate>?XXX?</PeriodBeginDate>
-                <!-- optional -->
-                <PeriodBeginTime>?XXX?</PeriodBeginTime>
-                <!-- optional -->
-                <PeriodEndDate>?XXX?</PeriodEndDate>
-                <!-- optional -->
-                <PeriodEndTime>?XXX?</PeriodEndTime>
-                <!-- optional -->
-                <PostCode>?XXX?</PostCode>
-                <!-- optional -->
-                <City>?XXX?</City>
-                <!-- optional -->
-                <District>?XXX?</District>
-                <!-- optional -->
-                <Street>?XXX?</Street>
-                <!-- optional -->
-                <HouseNumber>?XXX?</HouseNumber>
-                <!-- optional -->
-                <FromCrossroad>?XXX?</FromCrossroad>
-                <!-- optional -->
-                <ToCrossroad>?XXX?</ToCrossroad>
-                <!-- optional -->
-                <LicensePlate>?XXX?</LicensePlate>
-                <!-- optional -->
-                <GeoAreaCoordinates>?XXX?</GeoAreaCoordinates>
-                <!-- optional -->
-                <GeoOverviewCoordinates>?XXX?</GeoOverviewCoordinates>
-            </ubirch:Document>
-        </soap:Body>
+      <soap:Body>
+        <ubirch:Document xmlns:ubirch='http://ubirch.com/wsdl/1.0'>
+          <ActionReferenceNumber>a</ActionReferenceNumber>
+          <ActionID>1234567890</ActionID>
+          <SpecialUseDesc>C32-cb12347-test</SpecialUseDesc>
+          <PeriodBeginDate>2020-11-10</PeriodBeginDate>
+          <PeriodBeginTime>11:30</PeriodBeginTime>
+          <PeriodEndDate>2020-12-10</PeriodEndDate>
+          <PeriodEndTime>12:35</PeriodEndTime>
+          <PostCode>10997</PostCode>
+          <City>Berlin</City>
+          <District>Kreuzberg</District>
+          <Street>Eisenbahnstr.</Street>
+          <FromHouseNumber>42</FromHouseNumber>
+          <ToHouseNumber>43</ToHouseNumber>
+          <FromCrossroad>Muskauer Str.</FromCrossroad>
+          <ToCrossroad>Wrangelstr.</ToCrossroad>
+          <!-- optional -->
+          <LicensePlate>B-PL 1234</LicensePlate>
+          <!-- optional -->
+          <GeoAreaCoordinates>52.5021851,13.4296059</GeoAreaCoordinates>
+          <!-- optional -->
+          <GeoOverviewCoordinates>52.5021851,13.4296059</GeoOverviewCoordinates>
+        </ubirch:Document>
+      </soap:Body>
     </soap:Envelope>
     ```
   
@@ -74,10 +61,10 @@ A configuration file `config.json` is required and should be located in the work
   Body:
   ```xml
   <CertificationResponse>
-      <Hash>DtHDmmjNhEBo2hRtaC6gf2rDNIY79KZl1pVRYwNoOk8=</Hash>
-      <Upp>liPEEN8YOMYeDkkYiMkbAAAmJZrEQH0GtjA55S0jh+7u1737r0sKhfFW/BafY1QXgLAoGTl0buqu4rivbLNEOaxg+EnqFXCIa3mktOIcwCF3mcZQheMAxCAO0cOaaM2EQGjaFG1oLqB/asM0hjv0pmXWlVFjA2g6T8RAcdSwMgBT26c7jIaw34KoFbkleRfKw/wx+2NLjdL1acBBGgJ6L5ldt9CMfPtuvNfEsrK2R6GJD5ukuYHHLK0pJA==</Upp>
-      <Response>liPEEJ08eP8i80RBpdGFxjbUhv/EQHHUsDIAU9unO4yGsN+CqBW5JXkXysP8MftjS43S9WnAQRoCei+ZXbfQjHz7brzXxLKytkehiQ+bpLmBxyytKSQAxBDrcgnN3+VHabEJ5zsfCTUUxEcwRQIgDOiLpZzX4vgtFCBZXl6wcF+pJA0OSkSH7fSNnODssMQCIQDqH5s8Hf65YjM/nX8881Ralx+gfPD43uGWtofJe7zTuQ==</Response>
-      <VerificationURL>https://SOMEDOMAIN.COM/verify#FromCrossroad:m;ToCrossroad:n;LicensePlate:o;ActionID:b;PeriodBeginDate:d;PeriodBeginTime:e;PeriodEndDate:f;District:j;Street:k;ActionReferenceNumber:a;SpecialUseID:c;PeriodEndTime:g;HouseNumber:l;GeoAreaCoordinates:p;GeoOverviewCoordinates:q;PostCode:h;City:i</VerificationURL>
+     <Hash>696vMmuQpXgNPugqCmRjKyItKtab8WAZYaHr1neZFPg=</Hash>
+     <Upp>liPEEHkErEkhS0uZl3pDzlbAItvEQIrhN1/890jw19ZIxfwMkMg9tTFgpqIt5zHTOMc/qW4edTUsKwM0LbgOWwWO4RK/69VtHGa1BCEnWsOISowzUSEAxCDr3q8ya5CleA0+6CoKZGMrIi0q1pvxYBlhoevWd5kU+MRA8o/CimZXNcnq4OOWXpWLLiRCXUemnkY1ZEZEAxqHN5IyXYX5qWE7Y5WAz/VkeE5iZL6wlq2ot4Ga7LmNbBinng==</Upp>
+     <Response>liPEEJ08eP8i80RBpdGFxjbUhv/EQPKPwopmVzXJ6uDjll6Viy4kQl1Hpp5GNWRGRAMahzeSMl2F+alhO2OVgM/1ZHhOYmS+sJatqLeBmuy5jWwYp54AxBCbcpUxcZ5HRoWGuX5tNarKxEgwRgIhANuUX2gPlYBj9r8x6882dhPvn4a5b0W3mDxqUxGrr3YjAiEAmiJ0UiMJ0QmGeDnQ4KmGcCRx7L2FzUIxGErxRgS0QSg=</Response>
+     <VerificationURL>https://ubirch.com/gelsenkirchen#FromHouseNumber:42;ToHouseNumber:43;GeoAreaCoordinates:52.5021851,13.4296059;PeriodEndTime:12:35;Street:Eisenbahnstr.;District:Kreuzberg;FromCrossroad:Muskauer Str.;SpecialUseDesc:C32-cb12347-test;PeriodBeginTime:11:30;PeriodEndDate:2020-12-10;City:Berlin;LicensePlate:B-PL 1234;ActionReferenceNumber:a;ActionID:1234567890;ToCrossroad:Wrangelstr.;GeoOverviewCoordinates:52.5021851,13.4296059;PeriodBeginDate:2020-11-10;PostCode:10997</VerificationURL>
   </CertificationResponse>
   ```
   
