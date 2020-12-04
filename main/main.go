@@ -189,7 +189,19 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	respCode, respBody, respHeader, err := sendJsonRequest(jsonReq, getUuid(req), getAuth(req))
+	uuid := getUuid(req)
+	if uuid == "" {
+		Error(w, "missing UUID", http.StatusNotAcceptable)
+		return
+	}
+
+	auth := getAuth(req)
+	if auth == "" {
+		Error(w, "missing auth token", http.StatusUnauthorized)
+		return
+	}
+
+	respCode, respBody, respHeader, err := sendJsonRequest(jsonReq, uuid, auth)
 	if err != nil {
 		Error(w, fmt.Sprintf("unable to send request: %v", err), http.StatusInternalServerError)
 		return
