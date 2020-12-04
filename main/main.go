@@ -30,20 +30,23 @@ type soapBody struct {
 }
 
 type soapDocument struct {
-	ActionReferenceNumber string `xml:"ActionReferenceNumber,omitempty"`
-	ActionID              string `xml:"ActionID,omitempty"`
-	SpecialUseID          string `xml:"SpecialUseID"`
-	PeriodBeginDate       string `xml:"PeriodBeginDate"`
-	PeriodBeginTime       string `xml:"PeriodBeginTime"`
-	PeriodEndDate         string `xml:"PeriodEndDate"`
-	PeriodEndTime         string `xml:"PeriodEndTime"`
-	PostCode              string `xml:"PostCode"`
-	City                  string `xml:"City"`
-	District              string `xml:"District"`
-	Street                string `xml:"Street"`
-	HouseNumber           string `xml:"HouseNumber"`
-	FromCrossroad         string `xml:"FromCrossroad"`
-	ToCrossroad           string `xml:"ToCrossroad"`
+	ActionReferenceNumber  string `json:"ActionReferenceNumber,omitempty"`
+	ActionID               string `json:"ActionID,omitempty"`
+	SpecialUseID           string `json:"SpecialUseID"`
+	PeriodBeginDate        string `json:"PeriodBeginDate"`
+	PeriodBeginTime        string `json:"PeriodBeginTime"`
+	PeriodEndDate          string `json:"PeriodEndDate"`
+	PeriodEndTime          string `json:"PeriodEndTime"`
+	PostCode               string `json:"PostCode"`
+	City                   string `json:"City"`
+	District               string `json:"District"`
+	Street                 string `json:"Street"`
+	HouseNumber            string `json:"HouseNumber"`
+	FromCrossroad          string `json:"FromCrossroad"`
+	ToCrossroad            string `json:"ToCrossroad"`
+	LicensePlate           string `json:"LicensePlate,omitempty"`
+	GeoAreaCoordinates     string `json:"GeoAreaCoordinates,omitempty"`
+	GeoOverviewCoordinates string `json:"GeoOverviewCoordinates,omitempty"`
 }
 
 type fault struct {
