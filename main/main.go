@@ -32,18 +32,18 @@ type soapBody struct {
 type soapDocument struct {
 	ActionReferenceNumber  string `json:"ActionReferenceNumber,omitempty"`
 	ActionID               string `json:"ActionID,omitempty"`
-	SpecialUseID           string `json:"SpecialUseID"`
-	PeriodBeginDate        string `json:"PeriodBeginDate"`
-	PeriodBeginTime        string `json:"PeriodBeginTime"`
-	PeriodEndDate          string `json:"PeriodEndDate"`
-	PeriodEndTime          string `json:"PeriodEndTime"`
-	PostCode               string `json:"PostCode"`
-	City                   string `json:"City"`
-	District               string `json:"District"`
-	Street                 string `json:"Street"`
-	HouseNumber            string `json:"HouseNumber"`
-	FromCrossroad          string `json:"FromCrossroad"`
-	ToCrossroad            string `json:"ToCrossroad"`
+	SpecialUseID           string `json:"SpecialUseID,omitempty"`
+	PeriodBeginDate        string `json:"PeriodBeginDate,omitempty"`
+	PeriodBeginTime        string `json:"PeriodBeginTime,omitempty"`
+	PeriodEndDate          string `json:"PeriodEndDate,omitempty"`
+	PeriodEndTime          string `json:"PeriodEndTime,omitempty"`
+	PostCode               string `json:"PostCode,omitempty"`
+	City                   string `json:"City,omitempty"`
+	District               string `json:"District,omitempty"`
+	Street                 string `json:"Street,omitempty"`
+	HouseNumber            string `json:"HouseNumber,omitempty"`
+	FromCrossroad          string `json:"FromCrossroad,omitempty"`
+	ToCrossroad            string `json:"ToCrossroad,omitempty"`
 	LicensePlate           string `json:"LicensePlate,omitempty"`
 	GeoAreaCoordinates     string `json:"GeoAreaCoordinates,omitempty"`
 	GeoOverviewCoordinates string `json:"GeoOverviewCoordinates,omitempty"`
@@ -124,7 +124,7 @@ func sendJsonRequest(reqBody []byte, uuid string, auth string) (int, []byte, htt
 	return resp.StatusCode, respBodyBytes, resp.Header, nil
 }
 
-func parseJsonResponse(respBody []byte, reqBody []byte) ([]byte, error) {
+func createSoapResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 	var resp CertificationResponse
 	err := json.Unmarshal(respBody, &resp)
 	if err != nil {
@@ -197,7 +197,7 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 
 	log.Infof("response: (%d) %s, %s", respCode, respBody, respHeader)
 
-	xmlResp, err := parseJsonResponse(respBody, jsonReq)
+	xmlResp, err := createSoapResponse(respBody, jsonReq)
 	if err != nil {
 		log.Error(err)
 		xmlFault, err := xml.Marshal(fault{Faultcode: "soap:Server", Faultstring: string(respBody)})
