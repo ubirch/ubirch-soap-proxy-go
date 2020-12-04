@@ -8,6 +8,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"path"
 	"strings"
 )
 
@@ -102,9 +104,13 @@ func getUuid(r *http.Request) string {
 func sendJsonRequest(reqBody []byte, uuid string, auth string) (int, []byte, http.Header, error) {
 	client := &http.Client{}
 
-	url := conf.UbirchClientURL + uuid
+	requURL, err := url.Parse(conf.UbirchClientURL)
+	if err != nil {
+		return 0, nil, nil, err
+	}
+	requURL.Path = path.Join(requURL.Path, uuid)
 
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
+	req, err := http.NewRequest("POST", requURL.String(), bytes.NewBuffer(reqBody))
 	if err != nil {
 		return 0, nil, nil, err
 	}

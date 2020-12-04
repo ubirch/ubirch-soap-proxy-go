@@ -13,7 +13,7 @@ A configuration file `config.json` is required and should be located in the work
   "uuid": "12345678-9abc-def0-1234-56789abcdef0",
   "auth": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
   "verificationBaseURL": "https://SOMEDOMAIN.COM/verify",
-  "ubirchClientURL": "http://localhost:8080/"
+  "ubirchClientURL": "http://localhost:8080"
 }
 ```
 
