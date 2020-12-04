@@ -3,25 +3,25 @@
     <soap:Body>
         <ubirch:Document xmlns:ubirch='http://ubirch.com/wsdl/1.0'>
             <ActionReferenceNumber>a</ActionReferenceNumber>
-            <ActionID>b</ActionID>
-            <SpecialUseID>c</SpecialUseID>
-            <PeriodBeginDate>d</PeriodBeginDate>
-            <PeriodBeginTime>e</PeriodBeginTime>
-            <PeriodEndDate>f</PeriodEndDate>
-            <PeriodEndTime>g</PeriodEndTime>
-            <PostCode>h</PostCode>
-            <City>i</City>
-            <District>j</District>
-            <Street>k</Street>
-            <HouseNumber>l</HouseNumber>
-            <FromCrossroad>m</FromCrossroad>
-            <ToCrossroad>n</ToCrossroad>
+            <ActionID>1234567890</ActionID>
+            <SpecialUseID>C32-cb12347-test</SpecialUseID>
+            <PeriodBeginDate>2020-11-10</PeriodBeginDate>
+            <PeriodBeginTime>11:30</PeriodBeginTime>
+            <PeriodEndDate>2020-12-10</PeriodEndDate>
+            <PeriodEndTime>12:35</PeriodEndTime>
+            <PostCode>10997</PostCode>
+            <City>Berlin</City>
+            <District>Kreuzberg</District>
+            <Street>Eisenbahnstr.</Street>
+            <HouseNumber>42</HouseNumber>
+            <FromCrossroad>Muskauer Str.</FromCrossroad>
+            <ToCrossroad>Wrangelstr.</ToCrossroad>
             <!-- optional -->
-            <LicensePlate>o</LicensePlate>
+            <LicensePlate>B-PL 1234</LicensePlate>
             <!-- optional -->
-            <GeoAreaCoordinates>p</GeoAreaCoordinates>
+            <GeoAreaCoordinates>52.5021851,13.4296059</GeoAreaCoordinates>
             <!-- optional -->
-            <GeoOverviewCoordinates>q</GeoOverviewCoordinates>
+            <GeoOverviewCoordinates>52.5021851,13.4296059</GeoOverviewCoordinates>
         </ubirch:Document>
     </soap:Body>
 </soap:Envelope>
