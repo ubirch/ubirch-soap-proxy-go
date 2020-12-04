@@ -130,25 +130,27 @@ func parseJsonResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	// todo extract method getVerificationURL
-	var reqMap map[string]string
-	err = json.Unmarshal(reqBody, &reqMap)
-	if err != nil {
-		log.Error(err) // todo
-	}
-
-	verificationURL := conf.VerificationBaseURL + "#"
-	for k, v := range reqMap {
-		verificationURL += fmt.Sprintf("%s:%s;", k, v)
-	}
-
-	resp.VerificationURL = strings.TrimSuffix(verificationURL, ";")
+	resp.VerificationURL = getVerificationURL(reqBody)
 
 	xmlBytes, err := xml.Marshal(resp)
 	if err != nil {
 		return nil, err
 	}
 	return xmlBytes, nil
+}
+
+func getVerificationURL(reqBody []byte) string {
+	var reqMap map[string]string
+	err := json.Unmarshal(reqBody, &reqMap)
+	if err != nil {
+		log.Errorf("unable to create verification URL: %v", err)
+	}
+
+	verificationURL := conf.VerificationBaseURL + "#"
+	for k, v := range reqMap {
+		verificationURL += fmt.Sprintf("%s:%s;", k, v)
+	}
+	return strings.TrimSuffix(verificationURL, ";")
 }
 
 func sendResponse(w http.ResponseWriter, respBody []byte, respCode int) {
