@@ -21,10 +21,6 @@ A configuration file `config.json` is required and should be located in the work
 - Headers:
     - `X-UUID`: `<UUID>`
     - `X-Auth-Token`: `<auth token>`
-  
-    The headers are **optional** if there is a UUID and auth token in the config file. 
-    
-    The UUID and auth token in the header have priority over the config file, if both are present.
 - Body: 
     ```xml
     <?xml version="1.0" encoding="utf-8"?>
