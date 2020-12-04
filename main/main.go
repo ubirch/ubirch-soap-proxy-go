@@ -191,7 +191,7 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 
 	uuid := getUuid(req)
 	if uuid == "" {
-		Error(w, "missing UUID", http.StatusNotAcceptable)
+		Error(w, "missing UUID", http.StatusUnauthorized)
 		return
 	}
 
