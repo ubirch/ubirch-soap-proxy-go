@@ -11,10 +11,7 @@ import (
 	"strings"
 )
 
-const (
-	configFile      = "config.json"
-	ubirchClientURL = "http://localhost:8080/%s"
-)
+const configFile = "config.json"
 
 var conf config
 
@@ -22,6 +19,7 @@ type config struct {
 	Uuid                string `json:"uuid"`
 	Auth                string `json:"auth"`
 	VerificationBaseURL string `json:"verificationBaseURL"`
+	UbirchClientURL     string `json:"ubirchClientURL"`
 }
 
 type soapEnvelope struct {
@@ -101,7 +99,7 @@ func getUuid(r *http.Request) string {
 func sendJsonRequest(reqBody []byte, uuid string, auth string) (int, []byte, http.Header, error) {
 	client := &http.Client{}
 
-	url := fmt.Sprintf(ubirchClientURL, uuid)
+	url := conf.UbirchClientURL + uuid
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(reqBody))
 	if err != nil {
