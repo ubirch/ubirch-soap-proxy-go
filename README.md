@@ -61,10 +61,10 @@ A configuration file `config.json` is required and should be located in the work
   Body:
   ```xml
   <CertificationResponse>
-     <Hash>696vMmuQpXgNPugqCmRjKyItKtab8WAZYaHr1neZFPg=</Hash>
-     <Upp>liPEEHkErEkhS0uZl3pDzlbAItvEQIrhN1/890jw19ZIxfwMkMg9tTFgpqIt5zHTOMc/qW4edTUsKwM0LbgOWwWO4RK/69VtHGa1BCEnWsOISowzUSEAxCDr3q8ya5CleA0+6CoKZGMrIi0q1pvxYBlhoevWd5kU+MRA8o/CimZXNcnq4OOWXpWLLiRCXUemnkY1ZEZEAxqHN5IyXYX5qWE7Y5WAz/VkeE5iZL6wlq2ot4Ga7LmNbBinng==</Upp>
-     <Response>liPEEJ08eP8i80RBpdGFxjbUhv/EQPKPwopmVzXJ6uDjll6Viy4kQl1Hpp5GNWRGRAMahzeSMl2F+alhO2OVgM/1ZHhOYmS+sJatqLeBmuy5jWwYp54AxBCbcpUxcZ5HRoWGuX5tNarKxEgwRgIhANuUX2gPlYBj9r8x6882dhPvn4a5b0W3mDxqUxGrr3YjAiEAmiJ0UiMJ0QmGeDnQ4KmGcCRx7L2FzUIxGErxRgS0QSg=</Response>
-     <VerificationURL>https://ubirch.com/gelsenkirchen#FromHouseNumber:42;ToHouseNumber:43;GeoAreaCoordinates:52.5021851,13.4296059;PeriodEndTime:12:35;Street:Eisenbahnstr.;District:Kreuzberg;FromCrossroad:Muskauer Str.;SpecialUseDesc:C32-cb12347-test;PeriodBeginTime:11:30;PeriodEndDate:2020-12-10;City:Berlin;LicensePlate:B-PL 1234;ActionReferenceNumber:a;ActionID:1234567890;ToCrossroad:Wrangelstr.;GeoOverviewCoordinates:52.5021851,13.4296059;PeriodBeginDate:2020-11-10;PostCode:10997</VerificationURL>
+    <Hash>696vMmuQpXgNPugqCmRjKyItKtab8WAZYaHr1neZFPg=</Hash>
+    <Upp>liPEEHkErEkhS0uZl3pDzlbAItvEQPKPwopmVzXJ6uDjll6Viy4kQl1Hpp5GNWRGRAMahzeSMl2F+alhO2OVgM/1ZHhOYmS+sJatqLeBmuy5jWwYp54AxCDr3q8ya5CleA0+6CoKZGMrIi0q1pvxYBlhoevWd5kU+MRAjlqV/SXR/DcK4D5MOfkr4RjRP1gd5v3nMx5yZ01EKJOQdXvSKxVy7fib+eSce/MZiI4/zVjDNsPyR5p13R86DQ==</Upp>
+    <Response>liPEEJ08eP8i80RBpdGFxjbUhv/EQI5alf0l0fw3CuA+TDn5K+EY0T9YHeb95zMecmdNRCiTkHV70isVcu34m/nknHvzGYiOP81YwzbD8keadd0fOg0AxBAhKEg3IDZKBJ+hkKmieI0nxEYwRAIgOOxMHw7kASyTFLWEFihDX8HKyJo6duVuYVRqhlHCIO0CIEamhxCKNeSuNkvXy8bJqIOvkD3iGc4A7JQaOqmavzSt</Response>
+    <VerificationURL>https://ubirch.com/gelsenkirchen#ActionReferenceNumber=a;PeriodEndDate=2020-12-10;ToHouseNumber=43;LicensePlate=B-PL 1234;SpecialUseDesc=C32-cb12347-test;PeriodBeginTime=11:30;PeriodEndTime=12:35;PostCode=10997;City=Berlin;Street=Eisenbahnstr.;GeoAreaCoordinates=52.5021851,13.4296059;GeoOverviewCoordinates=52.5021851,13.4296059;ActionID=1234567890;PeriodBeginDate=2020-11-10;District=Kreuzberg;FromHouseNumber=42;FromCrossroad=Muskauer Str.;ToCrossroad=Wrangelstr.</VerificationURL>
   </CertificationResponse>
   ```
   

@@ -156,7 +156,7 @@ func getVerificationURL(reqBody []byte) string {
 
 	verificationURL := conf.VerificationBaseURL + "#"
 	for k, v := range reqMap {
-		verificationURL += fmt.Sprintf("%s:%s;", k, v)
+		verificationURL += fmt.Sprintf("%s=%s;", k, v)
 	}
 	return strings.TrimSuffix(verificationURL, ";")
 }
