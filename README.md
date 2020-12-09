@@ -27,35 +27,20 @@ A configuration file `config.json` is required and should be located in the work
     <soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/'>
       <soap:Body>
         <ubirch:Document xmlns:ubirch='http://ubirch.com/wsdl/1.0'>
-          <!-- optional -->
           <ActionReferenceNumber>a</ActionReferenceNumber>
-          <!-- optional -->
           <ActionID>1234567890</ActionID>
-          <!-- optional -->
           <SpecialUseDesc>C32-cb12347-test</SpecialUseDesc>
-          <!-- optional -->
           <PeriodBeginDate>2020-11-10</PeriodBeginDate>
-          <!-- optional -->
           <PeriodBeginTime>11:30</PeriodBeginTime>
-          <!-- optional -->
           <PeriodEndDate>2020-12-10</PeriodEndDate>
-          <!-- optional -->
           <PeriodEndTime>12:35</PeriodEndTime>
-          <!-- optional -->
           <PostCode>10997</PostCode>
-          <!-- optional -->
           <City>Berlin</City>
-          <!-- optional -->
           <District>Kreuzberg</District>
-          <!-- optional -->
           <Street>Eisenbahnstr.</Street>
-          <!-- optional -->
           <FromHouseNumber>42</FromHouseNumber>
-          <!-- optional -->
           <ToHouseNumber>43</ToHouseNumber>
-          <!-- optional -->
           <FromCrossroad>Muskauer Str.</FromCrossroad>
-          <!-- optional -->
           <ToCrossroad>Wrangelstr.</ToCrossroad>
           <!-- optional -->
           <LicensePlate>B-PL 1234</LicensePlate>
