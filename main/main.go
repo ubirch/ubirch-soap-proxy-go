@@ -152,13 +152,21 @@ func getVerificationURL(reqBody []byte) string {
 	err := json.Unmarshal(reqBody, &reqMap)
 	if err != nil {
 		log.Errorf("unable to create verification URL: %v", err)
+		return ""
 	}
 
-	verificationURL := conf.VerificationBaseURL + "#"
+	verificationURL_string := conf.VerificationBaseURL + "#"
 	for k, v := range reqMap {
-		verificationURL += fmt.Sprintf("%s=%s;", k, v)
+		verificationURL_string += fmt.Sprintf("%s=%s;", k, v)
 	}
-	return strings.TrimSuffix(verificationURL, ";")
+	verificationURL_string = strings.TrimSuffix(verificationURL_string, ";")
+
+	verificationURL, err := url.Parse(verificationURL_string)
+	if err != nil {
+		log.Errorf("unable to parse verification URL: %v", err)
+		return ""
+	}
+	return verificationURL.String()
 }
 
 func sendResponse(w http.ResponseWriter, respBody []byte, respCode int) {
