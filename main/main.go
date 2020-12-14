@@ -23,20 +23,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"path"
 	"strings"
 )
 
 const configFile = "config.json"
 
-var conf config
-
-type config struct {
-	Uuid                string `json:"uuid"`
-	Auth                string `json:"auth"`
-	VerificationBaseURL string `json:"verificationBaseURL"`
-	UbirchClientURL     string `json:"ubirchClientURL"`
-}
+var conf Config
 
 type soapEnvelope struct {
 	Body soapBody `xml:"Body"`
@@ -76,14 +70,6 @@ type CertificationResponse struct {
 	Upp             string
 	Response        string
 	VerificationURL string
-}
-
-func (c *config) load(filename string) error {
-	contextBytes, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(contextBytes, c)
 }
 
 func parseSoapRequest(reqBody []byte) ([]byte, error) {
@@ -245,7 +231,12 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	err := conf.load(configFile)
+	var configDir string
+	if len(os.Args) > 1 {
+		configDir = os.Args[1]
+	}
+
+	err := conf.Load(configDir, configFile)
 	if err != nil {
 		log.Fatalf("Could not load config: %v", err)
 	}
