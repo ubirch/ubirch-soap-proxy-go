@@ -39,13 +39,20 @@ type config struct {
 }
 
 type soapEnvelope struct {
-	Body soapBody `xml:"Body"`
-}
-type soapBody struct {
-	Document soapDocument `xml:"Document"`
+	XMLName xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ Envelope,omitempty"`
+	Body    *soapBody
 }
 
-type soapDocument struct {
+type soapBody struct {
+	XMLName  xml.Name               `xml:"Body"`
+	Document *Document              `xml:"Document,omitempty"`
+	Response *CertificationResponse `xml:"CertificationResponse,omitempty"`
+	Fault    *Fault                 `xml:"Fault,omitempty"`
+}
+
+type Document struct {
+	XMLName *xml.Name `xml:"http://ubirch.com/wsdl/1.0 Document,omitempty"`
+
 	ActionReferenceNumber  string `json:"ActionReferenceNumber,omitempty"`
 	ActionID               string `json:"ActionID,omitempty"`
 	SpecialUseDesc         string `json:"SpecialUseDesc,omitempty"`
@@ -66,12 +73,14 @@ type soapDocument struct {
 	GeoOverviewCoordinates string `json:"GeoOverviewCoordinates,omitempty"`
 }
 
-type fault struct {
+type Fault struct {
 	Faultcode   string `xml:"faultcode"`
 	Faultstring string `xml:"faultstring"`
 }
 
 type CertificationResponse struct {
+	XMLName xml.Name `xml:"http://ubirch.com/wsdl/1.0 CertificationResponse,omitempty"`
+
 	Hash            string
 	Upp             string
 	Response        string
@@ -93,6 +102,7 @@ func parseSoapRequest(reqBody []byte) ([]byte, error) {
 		return nil, err
 	}
 
+	Envelope.Body.Document.XMLName = nil
 	jsonBytes, err := json.Marshal(Envelope.Body.Document)
 	if err != nil {
 		return nil, err
@@ -147,6 +157,7 @@ func sendJsonRequest(reqBody []byte, uuid string, auth string) (int, []byte, htt
 
 func createSoapResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 	var resp CertificationResponse
+
 	err := json.Unmarshal(respBody, &resp)
 	if err != nil {
 		return nil, err
@@ -154,7 +165,10 @@ func createSoapResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 
 	resp.VerificationURL = getVerificationURL(reqBody)
 
-	xmlBytes, err := xml.Marshal(resp)
+	soapResponse := soapEnvelope{Body: &soapBody{}}
+	soapResponse.Body.Response = &resp
+
+	xmlBytes, err := xml.Marshal(soapResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -190,7 +204,11 @@ func sendResponse(w http.ResponseWriter, respBody []byte, respCode int) {
 
 func Error(w http.ResponseWriter, error string, code int) {
 	log.Error(error)
-	xmlError, err := xml.Marshal(fault{Faultcode: "soap:Server", Faultstring: error})
+
+	soapResponse := soapEnvelope{Body: &soapBody{}}
+	soapResponse.Body.Fault = &Fault{Faultcode: "soap:Server", Faultstring: error}
+
+	xmlError, err := xml.Marshal(soapResponse)
 	if err != nil {
 		xmlError = []byte(error)
 	}
@@ -233,7 +251,11 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 	xmlResp, err := createSoapResponse(respBody, jsonReq)
 	if err != nil {
 		log.Error(err)
-		xmlFault, err := xml.Marshal(fault{Faultcode: "soap:Server", Faultstring: string(respBody)})
+
+		soapResponse := soapEnvelope{Body: &soapBody{}}
+		soapResponse.Body.Fault = &Fault{Faultcode: "soap:Server", Faultstring: string(respBody)}
+
+		xmlFault, err := xml.Marshal(soapResponse)
 		if err != nil {
 			xmlResp = respBody
 		} else {
