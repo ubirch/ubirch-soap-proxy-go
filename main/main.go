@@ -175,7 +175,7 @@ func createSoapResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return xmlBytes, nil
+	return append([]byte(xml.Header), xmlBytes...), nil
 }
 
 func getVerificationURL(reqBody []byte) (string, error) {
@@ -225,6 +225,8 @@ func Error(w http.ResponseWriter, error string, code int) {
 	xmlError, err := xml.Marshal(soapResponse)
 	if err != nil {
 		xmlError = []byte(error)
+	} else {
+		xmlError = append([]byte(xml.Header), xmlError...)
 	}
 	sendResponse(w, xmlError, code)
 }
