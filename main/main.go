@@ -163,7 +163,10 @@ func createSoapResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	resp.VerificationURL = getVerificationURL(reqBody)
+	resp.VerificationURL, err = getVerificationURL(reqBody)
+	if err != nil {
+		return nil, err
+	}
 
 	soapResponse := soapEnvelope{Body: &soapBody{}}
 	soapResponse.Body.Response = &resp
@@ -175,21 +178,29 @@ func createSoapResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 	return xmlBytes, nil
 }
 
-func getVerificationURL(reqBody []byte) string {
+func getVerificationURL(reqBody []byte) (string, error) {
 	var reqMap map[string]string
 	err := json.Unmarshal(reqBody, &reqMap)
 	if err != nil {
 		log.Errorf("unable to create verification URL: %v", err)
+		return "", err
 	}
 
-	verificationURL := conf.VerificationBaseURL + "#"
+	verificationURL, err := url.Parse(conf.VerificationBaseURL)
+	if err != nil {
+		log.Errorf("verification base URL is broken: %v", conf.VerificationBaseURL)
+		return "", err
+	}
+
+	var fragment = ""
 	for k, v := range reqMap {
 		if k != "XMLName" {
-			verificationURL += fmt.Sprintf("%s=%s;", k, v)
+			fragment += fmt.Sprintf("%s=%s;", k, v)
 		}
 	}
+	verificationURL.Fragment = fragment
 
-	return strings.TrimSuffix(verificationURL, ";")
+	return strings.TrimSuffix(verificationURL.String(), ";"), nil
 }
 
 func sendResponse(w http.ResponseWriter, respBody []byte, respCode int) {
