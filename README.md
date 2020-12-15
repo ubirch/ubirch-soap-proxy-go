@@ -60,12 +60,17 @@ A configuration file `config.json` is required and should be located in the work
   
   Body:
   ```xml
-  <CertificationResponse>
-    <Hash>696vMmuQpXgNPugqCmRjKyItKtab8WAZYaHr1neZFPg=</Hash>
-    <Upp>liPEEHkErEkhS0uZl3pDzlbAItvEQPKPwopmVzXJ6uDjll6Viy4kQl1Hpp5GNWRGRAMahzeSMl2F+alhO2OVgM/1ZHhOYmS+sJatqLeBmuy5jWwYp54AxCDr3q8ya5CleA0+6CoKZGMrIi0q1pvxYBlhoevWd5kU+MRAjlqV/SXR/DcK4D5MOfkr4RjRP1gd5v3nMx5yZ01EKJOQdXvSKxVy7fib+eSce/MZiI4/zVjDNsPyR5p13R86DQ==</Upp>
-    <Response>liPEEJ08eP8i80RBpdGFxjbUhv/EQI5alf0l0fw3CuA+TDn5K+EY0T9YHeb95zMecmdNRCiTkHV70isVcu34m/nknHvzGYiOP81YwzbD8keadd0fOg0AxBAhKEg3IDZKBJ+hkKmieI0nxEYwRAIgOOxMHw7kASyTFLWEFihDX8HKyJo6duVuYVRqhlHCIO0CIEamhxCKNeSuNkvXy8bJqIOvkD3iGc4A7JQaOqmavzSt</Response>
-    <VerificationURL>https://ubirch.com/gelsenkirchen#ActionReferenceNumber=a;PeriodEndDate=2020-12-10;ToHouseNumber=43;LicensePlate=B-PL 1234;SpecialUseDesc=C32-cb12347-test;PeriodBeginTime=11:30;PeriodEndTime=12:35;PostCode=10997;City=Berlin;Street=Eisenbahnstr.;GeoAreaCoordinates=52.5021851,13.4296059;GeoOverviewCoordinates=52.5021851,13.4296059;ActionID=1234567890;PeriodBeginDate=2020-11-10;District=Kreuzberg;FromHouseNumber=42;FromCrossroad=Muskauer Str.;ToCrossroad=Wrangelstr.</VerificationURL>
-  </CertificationResponse>
+  <?xml version="1.0" encoding="UTF-8"?>
+  <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ubirch:CertificationResponse xmlns:ubirch="http://ubirch.com/wsdl/1.0">
+            <Hash>rnGP6u911NZakVgzYTrgQXkyqlGPhE+KVgXAYixhsOc=</Hash>
+            <UPP>liPEEHkErEkhS0uZl3pDzlbAItvEQGYRAV0cfQv0I2UkzKzOb3j/qjBY+Addtbg//AdiHd1R5MuVCqM7jsAFLrZk4ESukICuT4XymZ74hhUmcw2AxwsAxCCucY/q73XU1lqRWDNhOuBBeTKqUY+ET4pWBcBiLGGw58RAlDqprKsmshw+dries4K7+56TVj4Z0VGBtWHTu3SkOcxCU2vxjivKilfysJZyV12kBdDpXdH2B3PYG33gaKqZKQ==</UPP>
+            <Response>liPEEJ08eP8i80RBpdGFxjbUhv/EQJQ6qayrJrIcPna4nrOCu/uek1Y+GdFRgbVh07t0pDnMQlNr8Y4ryopX8rCWclddpAXQ6V3R9gdz2Bt94GiqmSkAxBCzFe3jXJZKRq01xxHklHqyxEgwRgIhAOHlY9A22Bx0Y9M8JVGize5GTSJ8QMv7ZkC3H5gee8oaAiEApUIzQaDumPveBgdI3fmgtl65kuVVlgrRy3whWBRl42k=</Response>
+            <URL>https://ubirch.com/gelsenkirchen#GeoOverviewCoordinates=52.5021851,13.4296059;SpecialUseDesc=C32-cb12347-test;PostCode=10997;City=Berlin;FromHouseNumber=42;FromCrossroad=Muskauer%20Str.;LicensePlate=B-PL%201234;PeriodEndDate=2020-12-11;PeriodBeginDate=2020-11-09;District=Kreuzberg;Street=Eisenbahnstr.;ToHouseNumber=43;ActionID=1234567890;PeriodBeginTime=11:30;PeriodEndTime=12:35;ToCrossroad=Wrangelstr.;GeoAreaCoordinates=52.5021851,13.4296059;ActionReferenceNumber=a</URL>
+        </ubirch:CertificationResponse>
+    </soap:Body>
+  </soap:Envelope>
   ```
   
 - On fail:
@@ -74,10 +79,10 @@ A configuration file `config.json` is required and should be located in the work
 
   Body:
   ```xml
-  <fault>
+  <soap:Fault>
       <faultcode>soap:Server</faultcode>
       <faultstring>error message</faultstring>
-  </fault>
+  </soap:Fault>
   ```
 
 # Example

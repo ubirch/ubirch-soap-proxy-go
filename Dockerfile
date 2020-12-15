@@ -18,5 +18,6 @@ VOLUME /data
 EXPOSE 8090/tcp
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder app/main/main ubirch-soap-proxy
+COPY --from=builder app/certification.wsdl certification.wsdl
 ENTRYPOINT ["/ubirch-soap-proxy"]
 CMD ["/data"]
