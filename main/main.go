@@ -69,8 +69,8 @@ type Document struct {
 	ToHouseNumber         string `json:"ToHouseNumber,omitempty"`
 	FromCrossroad         string `json:"FromCrossroad,omitempty"`
 	ToCrossroad           string `json:"ToCrossroad,omitempty"`
+	LicensePlate          string `json:"LicensePlate,omitempty"`
 	// the following entities are currently not anchored
-	licensePlate           string `json:"LicensePlate,omitempty"`
 	geoAreaCoordinates     string `json:"GeoAreaCoordinates,omitempty"`
 	geoOverviewCoordinates string `json:"GeoOverviewCoordinates,omitempty"`
 }
