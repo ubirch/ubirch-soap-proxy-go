@@ -33,20 +33,23 @@ const configFile = "config.json"
 var conf Config
 
 type soapEnvelope struct {
-	XMLName xml.Name `xml:"http://schemas.xmlsoap.org/soap/envelope/ Envelope,omitempty"`
-	Body    *soapBody
+	Body *soapBody `xml:"Body"`
+}
+
+type soapResponseEnvelope struct {
+	XMLName xml.Name `xml:"soap:Envelope,omitempty"`
+	XmlNS1  string   `xml:"xmlns:soap,attr,omitempty"`
+
+	Body *soapBody `xml:"soap:Body"`
 }
 
 type soapBody struct {
-	XMLName  xml.Name               `xml:"Body"`
-	Document *Document              `xml:"Document,omitempty"`
-	Response *CertificationResponse `xml:"CertificationResponse,omitempty"`
-	Fault    *Fault                 `xml:"Fault,omitempty"`
+	Document *Document
+	Response *CertificationResponse
+	Fault    *Fault
 }
 
 type Document struct {
-	XMLName *xml.Name `xml:"http://ubirch.com/wsdl/1.0 Document,omitempty"`
-
 	ActionReferenceNumber  string `json:"ActionReferenceNumber,omitempty"`
 	ActionID               string `json:"ActionID,omitempty"`
 	SpecialUseDesc         string `json:"SpecialUseDesc,omitempty"`
@@ -68,17 +71,20 @@ type Document struct {
 }
 
 type Fault struct {
+	XMLName xml.Name `xml:"soap:Fault"`
+
 	Faultcode   string `xml:"faultcode"`
 	Faultstring string `xml:"faultstring"`
 }
 
 type CertificationResponse struct {
-	XMLName xml.Name `xml:"http://ubirch.com/wsdl/1.0 CertificationResponse,omitempty"`
+	XMLName xml.Name `xml:"ubirch:CertificationResponse"`
+	XmlNS   string   `xml:"xmlns:ubirch,attr,omitempty"`
 
-	Hash            string
-	Upp             string
-	Response        string
-	VerificationURL string
+	Hash            string `xml:"Hash"`
+	Upp             string `xml:"UPP"`
+	Response        string `xml:"Response"`
+	VerificationURL string `xml:"URL"`
 }
 
 func parseSoapRequest(reqBody []byte) ([]byte, error) {
@@ -88,7 +94,7 @@ func parseSoapRequest(reqBody []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	Envelope.Body.Document.XMLName = nil
+	//Envelope.Body.Document.XMLName = nil
 	jsonBytes, err := json.Marshal(Envelope.Body.Document)
 	if err != nil {
 		return nil, err
@@ -154,8 +160,10 @@ func createSoapResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	soapResponse := soapEnvelope{Body: &soapBody{}}
+	soapResponse := soapResponseEnvelope{Body: &soapBody{}}
+	soapResponse.XmlNS1 = "http://schemas.xmlsoap.org/soap/envelope/"
 	soapResponse.Body.Response = &resp
+	soapResponse.Body.Response.XmlNS = "http://ubirch.com/wsdl/1.0"
 
 	xmlBytes, err := xml.Marshal(soapResponse)
 	if err != nil {
@@ -205,7 +213,8 @@ func sendResponse(w http.ResponseWriter, respBody []byte, respCode int) {
 func Error(w http.ResponseWriter, error string, code int) {
 	log.Error(error)
 
-	soapResponse := soapEnvelope{Body: &soapBody{}}
+	soapResponse := soapResponseEnvelope{Body: &soapBody{}}
+	soapResponse.XmlNS1 = "http://schemas.xmlsoap.org/soap/envelope/"
 	soapResponse.Body.Fault = &Fault{Faultcode: "soap:Server", Faultstring: error}
 
 	xmlError, err := xml.Marshal(soapResponse)
@@ -218,6 +227,23 @@ func Error(w http.ResponseWriter, error string, code int) {
 }
 
 func handleRequest(w http.ResponseWriter, req *http.Request) {
+	// check if the WSDL description is requested
+	if req.Method == http.MethodGet {
+		keys, ok := req.URL.Query()["WSDL"]
+		if !ok || len(keys[0]) < 0 {
+			http.NotFound(w, req)
+			return
+		}
+		w.Header().Set("Content-Type", "application/wsdl+xml; charset=utf-8")
+		http.ServeFile(w, req, "certification.wsdl")
+		return
+	}
+
+	if req.Method != http.MethodPost {
+		Error(w, "forbidden", http.StatusMethodNotAllowed)
+		return
+	}
+
 	soapReq, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		Error(w, fmt.Sprintf("unable to read request body: %v", err), http.StatusBadRequest)
@@ -254,7 +280,8 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Error(err)
 
-		soapResponse := soapEnvelope{Body: &soapBody{}}
+		soapResponse := soapResponseEnvelope{Body: &soapBody{}}
+		soapResponse.XmlNS1 = "http://schemas.xmlsoap.org/soap/envelope/"
 		soapResponse.Body.Fault = &Fault{Faultcode: "soap:Server", Faultstring: string(respBody)}
 
 		xmlFault, err := xml.Marshal(soapResponse)
