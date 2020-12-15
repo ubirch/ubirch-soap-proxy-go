@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="1813abbf-6596-47ca-aa42-af4602eb2c90" activeEnvironment="Default" name="ubirch-soap-proxy" resourceRoot="${projectDir}" soapui-version="5.6.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.actions.iface.tools.soapui.TestRunnerAction@values-local"><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+  <con:entry key="Report Format(s)" value=""/>
+  <con:entry key="Host:Port" value=""/>
+  <con:entry key="Export JUnit Results" value="false"/>
+  <con:entry key="Export All" value="false"/>
+  <con:entry key="Save After" value="false"/>
+  <con:entry key="Add Settings" value="false"/>
+  <con:entry key="WSS Password Type" value=""/>
+  <con:entry key="TestSuite" value="DocumentCertificationSOAP TestSuite"/>
+  <con:entry key="Endpoint" value=""/>
+  <con:entry key="Select Report Type" value=""/>
+  <con:entry key="System Properties" value=""/>
+  <con:entry key="Password" value=""/>
+  <con:entry key="Print Report" value="false"/>
+  <con:entry key="Open Report" value="false"/>
+  <con:entry key="Export JUnit Results with test properties" value="false"/>
+  <con:entry key="Global Properties" value=""/>
+  <con:entry key="Project Properties" value=""/>
+  <con:entry key="Project Password" value=""/>
+  <con:entry key="TestCase" value="&lt;all>"/>
+  <con:entry key="Username" value=""/>
+  <con:entry key="user-settings.xml Password" value=""/>
+  <con:entry key="TestRunner Path" value=""/>
+  <con:entry key="Environment" value="Default"/>
+  <con:entry key="Coverage Report" value="false"/>
+  <con:entry key="Enable UI" value="false"/>
+  <con:entry key="Root Folder" value=""/>
+  <con:entry key="Ignore Errors" value="false"/>
+  <con:entry key="Domain" value=""/>
+  <con:entry key="Tool Args" value=""/>
+  <con:entry key="Save Project" value="false"/>
+</xml-fragment>]]></con:setting></con:settings><con:interface xsi:type="con:WsdlInterface" id="a72b28f8-24d4-41de-b7f9-d7c7b5bc19e7" wsaVersion="NONE" name="DocumentCertificationSOAP" type="wsdl" bindingName="{http://ubirch.com/wsdl/1.0}DocumentCertificationSOAP" soapVersion="1_1" anonymous="optional" definition="../certification.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/leo/src/ubirch/ubirch-soap-proxy-go/certification.wsdl"><con:part><con:url>file:/home/leo/src/ubirch/ubirch-soap-proxy-go/certification.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="UBIRCHClientService" targetNamespace="http://ubirch.com/wsdl/1.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ubirch="http://ubirch.com/wsdl/1.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:documentation>Description of the special use UBIRCH client service.</wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://ubirch.com/wsdl/1.0">
+      <xsd:element name="Document">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="ActionReferenceNumber" type="xsd:string"/>
+            <!--Aktenzeichen-->
+            <xsd:element name="ActionID" type="xsd:string"/>
+            <xsd:element name="SpecialUseDesc" type="xsd:string"/>
+            <!--no ID but descriptive Text-->
+            <xsd:element name="PeriodBeginDate" type="xsd:string"/>
+            <xsd:element name="PeriodBeginTime" type="xsd:string"/>
+            <xsd:element name="PeriodEndDate" type="xsd:string"/>
+            <xsd:element name="PeriodEndTime" type="xsd:string"/>
+            <xsd:element name="PostCode" type="xsd:string"/>
+            <xsd:element name="City" type="xsd:string"/>
+            <xsd:element name="District" type="xsd:string"/>
+            <xsd:element name="Street" type="xsd:string"/>
+            <xsd:element name="FromHouseNumber" type="xsd:string"/>
+            <!--from HouseNumber-->
+            <xsd:element name="ToHouseNumber" type="xsd:string"/>
+            <!--to HouseNumber-->
+            <xsd:element name="FromCrossroad" type="xsd:string"/>
+            <xsd:element name="ToCrossroad" type="xsd:string"/>
+            <xsd:element name="LicensePlate" type="xsd:string" minOccurs="0"/>
+            <!--List-->
+            <xsd:element name="GeoAreaCoordinates" type="xsd:string" minOccurs="0"/>
+            <!--List-->
+            <xsd:element name="GeoOverviewCoordinates" type="xsd:string" minOccurs="0"/>
+            <!--List-->
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="CertificationResponse">
+        <xsd:complexType>
+          <xsd:all>
+            <xsd:element name="Hash" type="xsd:string"/>
+            <xsd:element name="UPP" type="xsd:string"/>
+            <xsd:element name="Response" type="xsd:string"/>
+            <xsd:element name="URL" type="xsd:string"/>
+            <!--for QR Code-->
+          </xsd:all>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="CertificationFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" name="faultcode" type="xsd:string"/>
+            <xsd:element minOccurs="0" name="faultstring" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="DocumentCertificationRequest">
+    <wsdl:part name="parameters" element="ubirch:Document"/>
+  </wsdl:message>
+  <wsdl:message name="DocumentCertificationResponse">
+    <wsdl:part name="parameters" element="ubirch:CertificationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="CertificationFaultResponse">
+    <wsdl:part name="fault" element="ubirch:CertificationFault"/>
+  </wsdl:message>
+  <wsdl:portType name="DocumentCertification">
+    <wsdl:documentation>Send a certification request to anchor document.</wsdl:documentation>
+    <wsdl:operation name="certify">
+      <wsdl:input message="ubirch:DocumentCertificationRequest"/>
+      <wsdl:output message="ubirch:DocumentCertificationResponse"/>
+      <wsdl:fault message="ubirch:CertificationFaultResponse" name="CertificationFaultResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DocumentCertificationSOAP" type="ubirch:DocumentCertification">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="certify">
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="CertificationFault">
+        <soap:fault name="CertificationFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DocumentCertificationService">
+    <wsdl:port binding="ubirch:DocumentCertificationSOAP" name="DocumentServiceSOAP"/>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8090</con:endpoint></con:endpoints><con:operation id="93b5e6af-30f6-48a0-81ae-9a12d6616b64" isOneWay="false" action="" name="certify" bindingOperationName="certify" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="5158159f-4f26-4f67-b51b-1c59cd86c450" name="Request"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8090</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ubirch.com/wsdl/1.0">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:Document>
+         <ActionReferenceNumber>?</ActionReferenceNumber>
+         <ActionID>?</ActionID>
+         <SpecialUseDesc>?</SpecialUseDesc>
+         <PeriodBeginDate>?</PeriodBeginDate>
+         <PeriodBeginTime>?</PeriodBeginTime>
+         <PeriodEndDate>?</PeriodEndDate>
+         <PeriodEndTime>?</PeriodEndTime>
+         <PostCode>?</PostCode>
+         <City>?</City>
+         <District>?</District>
+         <Street>?</Street>
+         <FromHouseNumber>?</FromHouseNumber>
+         <ToHouseNumber>?</ToHouseNumber>
+         <FromCrossroad>?</FromCrossroad>
+         <ToCrossroad>?</ToCrossroad>
+         <!--Optional:-->
+         <LicensePlate>?</LicensePlate>
+         <!--Optional:-->
+         <GeoAreaCoordinates>?</GeoAreaCoordinates>
+         <!--Optional:-->
+         <GeoOverviewCoordinates>?</GeoOverviewCoordinates>
+      </ns:Document>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ubirch.com/wsdl/1.0/DocumentCertification/certifyRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="fa02e960-83db-4c0c-86d6-88faf2817f12" name="DocumentCertificationSOAP TestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="37c55bf8-fe44-4d1d-affa-0d09f5da23ab" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="certify TestCase" searchProperties="true"><con:settings/><con:testStep type="request" id="bd515f08-af07-4ff6-bcbc-61311da957b6" name="certify - Request"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>DocumentCertificationSOAP</con:interface><con:operation>certify</con:operation><con:request name="certify - Request" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="3237da3c-5b4f-4456-8173-43b5ef87235c"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8090</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Header/>
+   <soapenv:Body>
+              <ubirch:Document xmlns:ubirch='http://ubirch.com/wsdl/1.0'>
+            <ActionReferenceNumber>a</ActionReferenceNumber>
+            <ActionID>1234567890</ActionID>
+            <SpecialUseDesc>C32-cb12347-test</SpecialUseDesc>
+            <PeriodBeginDate>2020-11-10</PeriodBeginDate>
+            <PeriodBeginTime>11:30</PeriodBeginTime>
+            <PeriodEndDate>2020-12-10</PeriodEndDate>
+            <PeriodEndTime>12:35</PeriodEndTime>
+            <PostCode>10997</PostCode>
+            <City>Berlin</City>
+            <District>Kreuzberg</District>
+            <Street>Eisenbahnstr.</Street>
+            <FromHouseNumber>42</FromHouseNumber>
+            <ToHouseNumber>43</ToHouseNumber>
+            <FromCrossroad>Muskauer Str.</FromCrossroad>
+            <ToCrossroad>Wrangelstr.</ToCrossroad>
+            <!-- optional -->
+            <LicensePlate>B-PL 1234</LicensePlate>
+            <!-- optional -->
+            <GeoAreaCoordinates>52.5021851,13.4296059</GeoAreaCoordinates>
+            <!-- optional -->
+            <GeoOverviewCoordinates>52.5021851,13.4296059</GeoOverviewCoordinates>
+        </ubirch:Document>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="8ab6d92c-86a5-45bd-83cf-7f98db0acc8c" name="SOAP Response"/><con:assertion type="Schema Compliance" id="6952fe8c-2045-49b6-a4f7-c304aa956b5e" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="cdc37b6b-0db0-4cc2-977e-1cb68c5fa501" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ubirch.com/wsdl/1.0/DocumentCertification/certifyRequest"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

@@ -36,9 +36,13 @@ type soapEnvelope struct {
 	Body *soapBody `xml:"Body"`
 }
 
+// TODO this is a workaround, to overcome shortcomings of the Go XML Marshaller
+// TODO see here for the XML issue: https://github.com/golang/go/issues/9519#issuecomment-428554816
+// This specific struct can only be used for marshalling, NOT unmarshalling.
+// Additionally, it requires to set the namespace URI manually in the code.
 type soapResponseEnvelope struct {
 	XMLName xml.Name `xml:"soap:Envelope,omitempty"`
-	XmlNS1  string   `xml:"xmlns:soap,attr,omitempty"`
+	SoapNS  string   `xml:"xmlns:soap,attr,omitempty"`
 
 	Body *soapBody `xml:"soap:Body"`
 }
@@ -78,8 +82,8 @@ type Fault struct {
 }
 
 type CertificationResponse struct {
-	XMLName xml.Name `xml:"ubirch:CertificationResponse"`
-	XmlNS   string   `xml:"xmlns:ubirch,attr,omitempty"`
+	XMLName  xml.Name `xml:"ubirch:CertificationResponse"`
+	UbirchNS string   `xml:"xmlns:ubirch,attr,omitempty"`
 
 	Hash            string `xml:"Hash"`
 	Upp             string `xml:"UPP"`
@@ -160,10 +164,11 @@ func createSoapResponse(respBody []byte, reqBody []byte) ([]byte, error) {
 		return nil, err
 	}
 
+	// to be compliant, we need to set the namespace URIs here
 	soapResponse := soapResponseEnvelope{Body: &soapBody{}}
-	soapResponse.XmlNS1 = "http://schemas.xmlsoap.org/soap/envelope/"
+	soapResponse.SoapNS = "http://schemas.xmlsoap.org/soap/envelope/"
 	soapResponse.Body.Response = &resp
-	soapResponse.Body.Response.XmlNS = "http://ubirch.com/wsdl/1.0"
+	soapResponse.Body.Response.UbirchNS = "http://ubirch.com/wsdl/1.0"
 
 	xmlBytes, err := xml.Marshal(soapResponse)
 	if err != nil {
@@ -213,8 +218,9 @@ func sendResponse(w http.ResponseWriter, respBody []byte, respCode int) {
 func Error(w http.ResponseWriter, error string, code int) {
 	log.Error(error)
 
+	// to be compliant, we need to set the namespace URIs here
 	soapResponse := soapResponseEnvelope{Body: &soapBody{}}
-	soapResponse.XmlNS1 = "http://schemas.xmlsoap.org/soap/envelope/"
+	soapResponse.SoapNS = "http://schemas.xmlsoap.org/soap/envelope/"
 	soapResponse.Body.Fault = &Fault{Faultcode: "soap:Server", Faultstring: error}
 
 	xmlError, err := xml.Marshal(soapResponse)
@@ -280,8 +286,9 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Error(err)
 
+		// to be compliant, we need to set the namespace URIs here
 		soapResponse := soapResponseEnvelope{Body: &soapBody{}}
-		soapResponse.XmlNS1 = "http://schemas.xmlsoap.org/soap/envelope/"
+		soapResponse.SoapNS = "http://schemas.xmlsoap.org/soap/envelope/"
 		soapResponse.Body.Fault = &Fault{Faultcode: "soap:Server", Faultstring: string(respBody)}
 
 		xmlFault, err := xml.Marshal(soapResponse)
