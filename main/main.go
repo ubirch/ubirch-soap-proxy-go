@@ -195,7 +195,12 @@ func getVerificationURL(reqBody []byte) (string, error) {
 	var fragment = ""
 	for k, v := range reqMap {
 		if k != "XMLName" {
-			fragment += fmt.Sprintf("%s=%s;", k, v)
+			if key, ok := (*conf.XmlMapping)[k]; ok {
+				fragment += fmt.Sprintf("%s=%s;", key, v)
+			} else {
+				log.Errorf("missing key mapping for %s", k)
+				fragment += fmt.Sprintf("%s=%s;", k, v)
+			}
 		}
 	}
 	verificationURL.Fragment = fragment

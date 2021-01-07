@@ -10,18 +10,45 @@ import (
 )
 
 type Config struct {
-	Uuid                string `json:"uuid"`
-	Auth                string `json:"auth"`
-	VerificationBaseURL string `json:"verificationBaseURL"`
-	UbirchClientURL     string `json:"ubirchClientURL"`
+	Uuid                string             `json:"uuid"`
+	Auth                string             `json:"auth"`
+	VerificationBaseURL string             `json:"verificationBaseURL"`
+	UbirchClientURL     string             `json:"ubirchClientURL"`
+	XmlMapping          *map[string]string `json:"xmlMapping"`
+}
+
+var defaultXmlMapping = map[string]string{
+	"ActionReferenceNumber":  "arn",
+	"ActionID":               "id",
+	"SpecialUseDesc":         "ud",
+	"PeriodBeginDate":        "bd",
+	"PeriodBeginTime":        "bt",
+	"PeriodEndDate":          "ed",
+	"PeriodEndTime":          "et",
+	"PostCode":               "pc",
+	"City":                   "c",
+	"District":               "d",
+	"Street":                 "s",
+	"FromHouseNumber":        "fn",
+	"ToHouseNumber":          "tn",
+	"FromCrossroad":          "fc",
+	"ToCrossroad":            "tc",
+	"LicensePlate":           "lp",
+	"GeoAreaCoordinates":     "gac",
+	"GeoOverviewCoordinates": "goc",
 }
 
 func (c *Config) Load(configDir string, filename string) error {
+	var err error
 	if os.Getenv("UBIRCH_UBIRCH_CLIENT_URL") != "" {
-		return c.loadEnv()
+		err = c.loadEnv()
 	} else {
-		return c.loadFile(filepath.Join(configDir, filename))
+		err = c.loadFile(filepath.Join(configDir, filename))
 	}
+	if err == nil && c.XmlMapping == nil {
+		c.XmlMapping = &defaultXmlMapping
+	}
+	return err
 }
 
 // loadEnv reads the configuration from environment variables
