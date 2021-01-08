@@ -94,7 +94,7 @@ The XML tags are mapped to short keys for the URL so it is not unnecessary long.
       <soap:Body>
           <ubirch:CertificationResponse xmlns:ubirch="http://ubirch.com/wsdl/1.0">
               <Hash>OfS7M7hrQpvQDuXqHRt0f2FltnI94iyaTAyHZCy1ju8=</Hash>
-              <UPP>iPEEHkErEkhS0uZl3pDzlbAItvEQHq8w1BkzlHevdxbfPRqA8fOorJL89QqiDJZeLXM4wp7tFhST+Ma1awnPbCEgIMABigFHDYHGQONXGemQotOQeQAxCA59LszuGtCm9AO5eodG3R/YWW2cj3iLJpMDIdkLLWO78RAfD/T4FgZfLbjpzZSw1YuNmfsCM1rCdWZFlB0Y07Jg04SX+DXJH3JrSGqDUv514005wrFPLSFH91/7zll1P4F2Q==</UPP>
+              <UPP>liPEEHkErEkhS0uZl3pDzlbAItvEQHq8w1BkzlHevdxbfPRqA8fOorJL89QqiDJZeLXM4wp7tFhST+Ma1awnPbCEgIMABigFHDYHGQONXGemQotOQeQAxCA59LszuGtCm9AO5eodG3R/YWW2cj3iLJpMDIdkLLWO78RAfD/T4FgZfLbjpzZSw1YuNmfsCM1rCdWZFlB0Y07Jg04SX+DXJH3JrSGqDUv514005wrFPLSFH91/7zll1P4F2Q==</UPP>
               <Response>liPEEJ08eP8i80RBpdGFxjbUhv/EQHw/0+BYGXy246c2UsNWLjZn7AjNawnVmRZQdGNOyYNOEl/g1yR9ya0hqg1L+deNNOcKxTy0hR/df+85ZdT+BdkAxBAp232Tr9hALp+jdS83oJVjxEcwRQIhAP4a3txN+jwDBYETo2q5hDrzXS5OPxMejyCSROSdYqCkAiB4mNFBa68ASzsbJVvvEmNUS/H+nNApd1oNmdU/yvSjhQ==</Response>
               <URL>https://ubirch.com/gelsenkirchen#arn=a;pc=10997;s=Eisenbahnstr.;tn=43;fc=Muskauer%20Str.;lp=B-PL%201234;id=1234567890;tc=Wrangelstr.;bt=11:30;ed=2020-12-11;et=12:35;c=Berlin;d=Kreuzberg;fn=42;ud=C32-cb12347-test;bd=2020-11-09</URL>
           </ubirch:CertificationResponse>
