@@ -54,25 +54,25 @@ type soapBody struct {
 }
 
 type Document struct {
-	ActionReferenceNumber string `json:"ActionReferenceNumber,omitempty"`
-	ActionID              string `json:"ActionID,omitempty"`
-	SpecialUseDesc        string `json:"SpecialUseDesc,omitempty"`
-	PeriodBeginDate       string `json:"PeriodBeginDate,omitempty"`
-	PeriodBeginTime       string `json:"PeriodBeginTime,omitempty"`
-	PeriodEndDate         string `json:"PeriodEndDate,omitempty"`
-	PeriodEndTime         string `json:"PeriodEndTime,omitempty"`
-	PostCode              string `json:"PostCode,omitempty"`
-	City                  string `json:"City,omitempty"`
-	District              string `json:"District,omitempty"`
-	Street                string `json:"Street,omitempty"`
-	FromHouseNumber       string `json:"FromHouseNumber,omitempty"`
-	ToHouseNumber         string `json:"ToHouseNumber,omitempty"`
-	FromCrossroad         string `json:"FromCrossroad,omitempty"`
-	ToCrossroad           string `json:"ToCrossroad,omitempty"`
+	ActionReferenceNumber string `json:"arn,omitempty"`
+	ActionID              string `json:"id,omitempty"`
+	SpecialUseDesc        string `json:"ud,omitempty"`
+	PeriodBeginDate       string `json:"bd,omitempty"`
+	PeriodBeginTime       string `json:"bt,omitempty"`
+	PeriodEndDate         string `json:"ed,omitempty"`
+	PeriodEndTime         string `json:"et,omitempty"`
+	PostCode              string `json:"pc,omitempty"`
+	City                  string `json:"c,omitempty"`
+	District              string `json:"d,omitempty"`
+	Street                string `json:"s,omitempty"`
+	FromHouseNumber       string `json:"fn,omitempty"`
+	ToHouseNumber         string `json:"tn,omitempty"`
+	FromCrossroad         string `json:"fc,omitempty"`
+	ToCrossroad           string `json:"tc,omitempty"`
 	// the following entities are currently not anchored
-	licensePlate           string `json:"LicensePlate,omitempty"`
-	geoAreaCoordinates     string `json:"GeoAreaCoordinates,omitempty"`
-	geoOverviewCoordinates string `json:"GeoOverviewCoordinates,omitempty"`
+	licensePlate           string `json:"lp,omitempty"`
+	geoAreaCoordinates     string `json:"gac,omitempty"`
+	geoOverviewCoordinates string `json:"goc,omitempty"`
 }
 
 type Fault struct {
